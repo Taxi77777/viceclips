@@ -43,6 +43,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          YOUTUBE_SECRET: ${{ secrets.YOUTUBE_SECRET }}
           VICECLIPS_CLOUD: "1"
         run: python clipper.py
 

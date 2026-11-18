@@ -295,8 +295,78 @@ def log_csv(row):
         w.writerow(row)
 
 
+# ---------- Publication YouTube (API officielle) ----------
+_yt_cache = {}
+
+
+def yt_conf():
+    raw = os.environ.get("YOUTUBE_SECRET")
+    if not raw:
+        return None
+    try:
+        return json.loads(raw)
+    except Exception:
+        log("YOUTUBE_SECRET illisible"); return None
+
+
+def yt_access(lang):
+    c = yt_conf()
+    if not c or lang not in c.get("tokens", {}):
+        return None
+    if lang in _yt_cache:
+        return _yt_cache[lang]
+    data = urllib.parse.urlencode({"client_id": c["client_id"], "client_secret": c["client_secret"],
+                                   "refresh_token": c["tokens"][lang], "grant_type": "refresh_token"}).encode()
+    try:
+        tok = json.loads(urllib.request.urlopen("https://oauth2.googleapis.com/token", data, timeout=30).read())
+        _yt_cache[lang] = tok["access_token"]
+        return _yt_cache[lang]
+    except Exception as e:
+        log(f"YouTube {lang}: autorisation expiree ou refusee ({e})")
+        telegram(f"ViceClips : l'autorisation YouTube {lang.upper()} a expire. Relance 5_RELIER_YOUTUBE.bat.")
+        return None
+
+
+def yt_quota_ok(state):
+    jour = datetime.date.today().isoformat()
+    q = state.setdefault("_youtube_quota", {})
+    if q.get("jour") != jour:
+        q.clear(); q["jour"] = jour; q["n"] = 0
+    return q["n"] < CFG.get("youtube_max_par_jour", 6)
+
+
+def youtube_upload(mp4, lang, title, description, state):
+    if not yt_quota_ok(state):
+        return False
+    acc = yt_access(lang)
+    if not acc:
+        return False
+    meta = {"snippet": {"title": title[:95], "description": description[:4900], "categoryId": "20",
+                        "tags": ["GTA6", "GTA VI", "Shorts", "Gaming"], "defaultLanguage": lang},
+            "status": {"privacyStatus": CFG.get("youtube_visibilite", "public"),
+                       "selfDeclaredMadeForKids": False}}
+    try:
+        req = urllib.request.Request(
+            "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",
+            data=json.dumps(meta).encode(), method="POST",
+            headers={"Authorization": f"Bearer {acc}", "Content-Type": "application/json; charset=UTF-8",
+                     "X-Upload-Content-Type": "video/mp4"})
+        loc = urllib.request.urlopen(req, timeout=60).headers["Location"]
+        body = Path(mp4).read_bytes()
+        put = urllib.request.Request(loc, data=body, method="PUT",
+                                     headers={"Authorization": f"Bearer {acc}", "Content-Type": "video/mp4"})
+        vid = json.loads(urllib.request.urlopen(put, timeout=600).read())["id"]
+        state["_youtube_quota"]["n"] += 1
+        log(f"  YouTube {lang.upper()} publie : https://youtube.com/shorts/{vid}")
+        return f"https://youtube.com/shorts/{vid}"
+    except Exception as e:
+        log(f"  YouTube {lang}: echec upload ({e})")
+        return False
+
+
 # ---------- 6. Traitement d'une video ----------
-def process(video, lang):
+def process(video, lang, state=None):
+    state = state if state is not None else {}
     vid = video["id"]
     d = WORK / vid; d.mkdir(exist_ok=True)
     log(f"[{lang}] {video['title'][:70]} ({video['channel']})")
@@ -338,7 +408,9 @@ def process(video, lang):
             mp4 = od / f"{name}.mp4"
             if render(raw, ass, mp4):
                 write_caption(od / f"{name}.txt", tgt, video, hook)
-                telegram_video(mp4, f"[{tgt.upper()}] " + (od / f"{name}.txt").read_text(encoding="utf-8"))
+                cap = (od / f"{name}.txt").read_text(encoding="utf-8")
+                lien = youtube_upload(mp4, tgt, f"{hook} #GTA6 #Shorts", cap, state)
+                telegram_video(mp4, f"[{tgt.upper()}] " + (f"YouTube: {lien}\n\n" if lien else "") + cap)
                 log_csv([datetime.datetime.now().isoformat(timespec="minutes"), tgt, mp4.name,
                          video["channel"], video["url"], start, "", "", ""])
                 made += 1
@@ -355,7 +427,7 @@ def cycle():
             continue
         for v in discover(lang, conf, state):
             try:
-                total += process(v, lang)
+                total += process(v, lang, state)
             except Exception as e:
                 log(f"  erreur: {e}")
             state[v["id"]] = datetime.datetime.now().isoformat()
