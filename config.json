@@ -84,7 +84,7 @@
   "_langues": "Mets \"actif\": false pour couper une langue. traduire_vers = langues des versions traduites (chaque langue en plus = plus de temps de calcul).",
   "heures_max_analysees": 4,
   "_traduction": "Chaque clip est fait dans sa langue d'origine + traduit vers traduire_vers. Ajoute fr/de/ar/pt... si ton PC/serveur suit.",
-  "youtube_max_par_jour": 6,
+  "youtube_max_par_jour": 0,
   "youtube_visibilite": "public",
-  "_youtube": "Google limite a ~6 publications/jour au total (quota gratuit). Tant que l'appli n'est pas validee par Google, les videos restent privees."
+  "_youtube": "Publication YouTube COUPEE (0) : sans audit Google, les videos sont verrouillees en prive. Remettre 6 apres acceptation de l'audit."
 }
