@@ -47,6 +47,15 @@ jobs:
           VICECLIPS_CLOUD: "1"
         run: python clipper.py
 
+      - name: Garder les clips (telechargeables 7 jours dans l'onglet Actions)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clips-${{ github.run_number }}
+          path: PRETS_A_PUBLIER/
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Memoriser les videos deja traitees
         if: always()
         run: |
