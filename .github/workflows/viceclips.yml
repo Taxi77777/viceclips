@@ -1,0 +1,55 @@
+name: ViceClips 24h
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # toutes les 30 min, PC eteint ou pas
+  workflow_dispatch: {}
+
+concurrency:
+  group: viceclips
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  clips:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Cache modeles (whisper + traduction)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            ~/.local/share/argos-translate
+            ~/.local/cache/argos-translate
+          key: modeles-v1
+
+      - name: Installer
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-liberation fonts-noto-core > /dev/null
+          pip install -q -U yt-dlp faster-whisper numpy argostranslate
+          python setup_traduction.py
+
+      - name: Faire les clips et les envoyer sur Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          VICECLIPS_CLOUD: "1"
+        run: python clipper.py
+
+      - name: Memoriser les videos deja traitees
+        if: always()
+        run: |
+          git config user.name "viceclips-bot"
+          git config user.email "viceclips-bot@users.noreply.github.com"
+          git add deja_traites.json journal_clips.csv 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "maj etat" && git push)

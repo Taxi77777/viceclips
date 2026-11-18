@@ -1,0 +1,87 @@
+{
+  "_aide": "Modifie seulement ce fichier. channels = pages VOD (Twitch/YouTube) des streamers dont tu as rejoint la campagne payante. Si une liste est vide, le bot cherche sur YouTube.",
+  "intervalle_minutes": 30,
+  "clips_par_video": 2,
+  "duree_clip_secondes": 30,
+  "videos_max_par_cycle_et_langue": 1,
+  "age_max_jours": 3,
+  "duree_video_min_minutes": 8,
+  "modele_whisper": "small",
+  "langues": {
+    "en": {
+      "channels": [
+        "https://www.twitch.tv/lacy/videos?filter=archives",
+        "https://www.twitch.tv/clix/videos?filter=archives"
+      ],
+      "recherche": "GTA 6 gameplay live",
+      "hashtags": "#GTA6 #GTAVI #GTA6Gameplay #Gaming #ViceCity #fyp",
+      "actif": true
+    },
+    "es": {
+      "channels": [
+        "https://www.twitch.tv/illojuan/videos?filter=archives",
+        "https://www.twitch.tv/auronplay/videos?filter=archives"
+      ],
+      "recherche": "GTA 6 gameplay español directo",
+      "hashtags": "#GTA6 #GTAVI #GTA6Español #Gaming #ViceCity #parati",
+      "actif": true
+    },
+    "de": {
+      "channels": [
+        "https://www.twitch.tv/montanablack88/videos?filter=archives",
+        "https://www.twitch.tv/trymacs/videos?filter=archives"
+      ],
+      "recherche": "GTA 6 gameplay deutsch live",
+      "hashtags": "#GTA6 #GTAVI #GTA6Deutsch #Gaming #ViceCity #fürdich",
+      "actif": true
+    },
+    "fr": {
+      "channels": [
+        "https://www.twitch.tv/jltomy/videos?filter=archives"
+      ],
+      "recherche": "GTA 6 gameplay français live",
+      "hashtags": "#GTA6 #GTAVI #GTA6FR #Gaming #ViceCity #pourtoi",
+      "actif": true
+    },
+    "ar": {
+      "channels": [],
+      "recherche": "GTA 6 بث مباشر عربي",
+      "hashtags": "#GTA6 #GTAVI #قراند6 #قراند #العاب #اكسبلور",
+      "actif": true
+    },
+    "pt": {
+      "channels": [],
+      "recherche": "GTA 6 gameplay ao vivo português",
+      "hashtags": "#GTA6 #GTAVI #GTA6Brasil #Gaming #ViceCity #fy",
+      "actif": true
+    },
+    "it": {
+      "channels": [],
+      "recherche": "GTA 6 gameplay italiano live",
+      "hashtags": "#GTA6 #GTAVI #GTA6ITA #Gaming #ViceCity #perte",
+      "actif": true
+    },
+    "tr": {
+      "channels": [],
+      "recherche": "GTA 6 türkçe canlı yayın",
+      "hashtags": "#GTA6 #GTAVI #GTA6Türkçe #Oyun #ViceCity #keşfet",
+      "actif": true
+    },
+    "ru": {
+      "channels": [],
+      "recherche": "GTA 6 прохождение стрим",
+      "hashtags": "#GTA6 #GTAVI #ГТА6 #игры #ViceCity #рекомендации",
+      "actif": true
+    }
+  },
+  "traduire_vers": [
+    "en",
+    "es"
+  ],
+  "recherche_si_pas_de_channels": true,
+  "telegram_bot_token": "",
+  "telegram_chat_id": "",
+  "_langues": "Mets \"actif\": false pour couper une langue. traduire_vers = langues des versions traduites (chaque langue en plus = plus de temps de calcul).",
+  "heures_max_analysees": 4,
+  "_traduction": "Chaque clip est fait dans sa langue d'origine + traduit vers traduire_vers. Ajoute fr/de/ar/pt... si ton PC/serveur suit."
+}

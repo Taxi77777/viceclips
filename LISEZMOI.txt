@@ -1,0 +1,50 @@
+VICECLIPS - BOT DE CLIPPING GTA 6 (9 LANGUES : EN ES DE FR AR PT IT TR RU) - 100 % GRATUIT
+=====================================================================
+
+INSTALLATION (une seule fois, environ 10 min)
+1. Decompresse ce ZIP dans Documents\ViceClips
+2. Double-clic sur 1_INSTALLER.bat  (accepte les fenetres Windows)
+3. Double-clic sur 2_TESTER.bat     (fait 1 cycle, ouvre PRETS_A_PUBLIER)
+4. Double-clic sur 3_LANCER_24H.bat (laisse la fenetre ouverte = bot actif)
+5. Option : 4_DEMARRAGE_AUTO_WINDOWS.bat (relance le bot a chaque demarrage)
+
+CE QUE FAIT LE BOT TOUT SEUL (toutes les 30 min)
+- Regarde les nouvelles VOD des streamers de config.json (Twitch/YouTube)
+  ou, si la liste est vide, les dernieres videos GTA 6 sur YouTube
+- Repere les pics de reaction (cris, rires) + mots d'excitation
+- Coupe des clips de 30 s, format 9:16, sous-titres jaunes, accroche en haut
+- Traduit les sous-titres : 1 moment = jusqu'a 9 versions (une par langue)
+- Range tout dans PRETS_A_PUBLIER\EN, \ES, \DE, \FR, \AR, \PT, \IT, \TR, \RU avec un .txt
+  (legende + hashtags + credit du streamer)
+- Note tout dans journal_clips.csv (ouvrable dans Excel)
+- Option : message Telegram quand des clips sont prets
+  (remplir telegram_bot_token et telegram_chat_id dans config.json)
+
+TA ROUTINE (10-15 min/jour)
+1. Ouvre PRETS_A_PUBLIER, regarde vite chaque clip, supprime les mauvais
+2. Publie sur le compte de la bonne langue (copie-colle le .txt)
+3. Soumets le lien dans la campagne Content Rewards dans les 30 min
+4. Note le lien dans journal_clips.csv
+
+REGLES POUR NE PAS ETRE BANNI / REFUSE
+- Ne clippe que les streamers dont tu as rejoint la campagne : sinon 0 euro
+  et risque de signalement pour droits d'auteur.
+  -> Mets leurs pages VOD dans config.json ("channels").
+- Respecte le brief de chaque campagne (mention, hashtags, duree).
+- Jamais de cinematiques, de fin de l'histoire ou de fuites : Rockstar supprime.
+- Pas de bot de publication automatique, pas d'achat de vues.
+- 2 a 4 clips par jour et par compte, pas 30.
+
+REGLAGES UTILES (config.json)
+- duree_clip_secondes : 30 (conseille 15-35)
+- clips_par_video : 3
+- modele_whisper : "small" (PC lent : "base" ; carte Nvidia : "medium")
+- Pour ajouter un streamer : https://www.twitch.tv/NOM/videos?filter=archives
+  ou https://www.youtube.com/@NOM/streams
+
+Les streamers deja mis sont des exemples tires de l'audit : garde seulement
+ceux dont tu rejoins la campagne, et ajoute les autres.
+
+LANGUES : chaque langue = 1 compte TikTok/YouTube/Instagram a part.
+PC lent ? Mets "actif": false sur les langues que tu ne publies pas encore,
+et reduis "traduire_vers" dans config.json.
